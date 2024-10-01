@@ -1,0 +1,26 @@
+{
+  "recipe": {
+    "title": "Scrambled Egg",
+    "calories": 248,
+    "description": "Learn how to make perfect scrambled eggs with this quick recipe",
+    "ingredients": [
+      {
+        "name": "Eggs",
+        "quantity": "2"
+      },
+      {
+        "name": "Butter",
+        "quantity": "1 tbsp"
+      },
+      {
+        "name": "Single Cream",
+        "quantity": "6 tbsp"
+      }
+    ],
+    "directions": [
+      "Lightly whisk the 2 large eggs and the 6 tbsp single cream together",
+      "Melt the 1 tbsp of butter in a non-stick frying pan",
+      "Pour in the egg mixture and let it sit without stirring for 20 seconds, then stir by lifting"
+    ]
+  }
+}
