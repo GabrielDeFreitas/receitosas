@@ -16,19 +16,17 @@ const createRecipeFormSchema = z.object({
         })
         .join(' ');
     }),
-  email: z.string().nonempty('o email é obrigatorio').email('formato de email invalido'),
-  password: z.string().min(6, 'a senha precisa de no minimio 6 caracteres'),
-  techs: z
+  description: z.string().nonempty('a descrição é obrigatorio'),
+  preparation_time: z.string().min(6, 'mínimo 6 caracteres').nonempty('campo obrigatório'),
+  cooking_time: z.string().min(6, 'mínimo 6 caracteres').nonempty('campo obrigatório'),
+  servings: z.string().min(6, 'mínimo 6 caracteres').nonempty('campo obrigatório'),
+  preparation: z
     .array(
       z.object({
-        title: z.string().nonempty('o titulo é obrigatorio'),
-        knowledge: z
-          .number()
-          .min(4, 'O conhecimento deve ser pelo menos 1')
-          .max(10, 'O conhecimento deve ser no máximo 2'),
+        preparation: z.string().nonempty('campo obrigatório'),
       }),
     )
-    .min(2, 'insira pelo menos 2 tecnologias'),
+    .min(2, 'insira pelo menos 2 preparações'),
 });
 
 type CreateUserFormData = z.infer<typeof createRecipeFormSchema>;
@@ -47,15 +45,25 @@ export function RecipeForm() {
 
   const { fields, append, remove } = useFieldArray({
     control,
-    name: 'techs',
+    name: 'preparation',
   });
 
   function createRecipe(data: CreateUserFormData) {
-    setOutput(JSON.stringify(data, null, 2));
+    const preparationWithOrder = data.preparation.map((prep, index) => ({
+      order: index + 1,
+      preparation: prep.preparation,
+    }));
+
+    const result = {
+      ...data,
+      preparation: preparationWithOrder,
+    };
+
+    setOutput(JSON.stringify(result, null, 2));
   }
 
   function addNewTech() {
-    append({ title: '', knowledge: 0 });
+    append({ preparation: '' });
   }
 
   return (
@@ -68,41 +76,49 @@ export function RecipeForm() {
             {errors.name && <span>{errors.name.message}</span>}
           </div>
           <div>
-            <label htmlFor="email">E-mail</label>
-            <input {...register('email')} className="border border-zinc-600" type="email" />
-            {errors.email && <span>{errors.email.message}</span>}
+            <label htmlFor="description">Description</label>
+            <input {...register('description')} className="border border-zinc-600" type="text" />
+            {errors.description && <span>{errors.description.message}</span>}
           </div>
           <div>
-            <label htmlFor="password">Password</label>
-            <input {...register('password')} className="border border-zinc-600" type="password" />
-            {errors.password && <span>{errors.password.message}</span>}
+            <label htmlFor="preparation_time">Preparation time</label>
+            <input {...register('preparation_time')} className="border border-zinc-600" type="text" />
+            {errors.preparation_time && <span>{errors.preparation_time.message}</span>}
           </div>
-
           <div>
-            <label htmlFor="techs">
-              Tecnologias
+            <label htmlFor="cooking_time">Cooking time</label>
+            <input {...register('cooking_time')} className="border border-zinc-600" type="text" />
+            {errors.cooking_time && <span>{errors.cooking_time.message}</span>}
+          </div>
+          <div>
+            <label htmlFor="servings">Servings</label>
+            <input {...register('servings')} className="border border-zinc-600" type="text" />
+            {errors.servings && <span>{errors.servings.message}</span>}
+          </div>
+          <div>
+            <label htmlFor="preparation">
+              Preparation
               <button type="button" onClick={addNewTech} className="bg-emerald-500 rounded font-semibold p-1">
                 adicionar
               </button>
             </label>
             {fields.map((field, index) => (
               <div key={field.id} className="flex items-center gap-2">
-                <input {...register(`techs.${index}.title`)} className="border border-zinc-600" type="text" />
-                {errors.techs?.[index]?.title && <span>{errors.techs[index].title.message}</span>}
-
+                <span>{`Order: ${index + 1}`}</span>
                 <input
-                  {...register(`techs.${index}.knowledge`, { valueAsNumber: true })}
+                  {...register(`preparation.${index}.preparation`)}
                   className="border border-zinc-600"
-                  type="number"
+                  type="text"
                 />
-                {errors.techs?.[index]?.knowledge && <span>{errors.techs[index].knowledge.message}</span>}
-
+                {errors.preparation?.[index]?.preparation && (
+                  <span>{errors.preparation[index].preparation.message}</span>
+                )}
                 <button type="button" onClick={() => remove(index)} className="bg-red-500 text-white rounded p-1">
                   Remover
                 </button>
               </div>
             ))}
-            {errors.techs && <span>{errors.techs.message}</span>}
+            {errors.preparation && <span>{errors.preparation.message}</span>}
           </div>
 
           <button className="bg-emerald-500 rounded font-semibold p-1" type="submit">
