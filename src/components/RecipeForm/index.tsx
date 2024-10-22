@@ -86,7 +86,7 @@ export function RecipeForm() {
               </button>
             </label>
             {fields.map((field, index) => (
-              <div key={field.id}>
+              <div key={field.id} className="flex items-center gap-2">
                 <input {...register(`techs.${index}.title`)} className="border border-zinc-600" type="text" />
                 {errors.techs?.[index]?.title && <span>{errors.techs[index].title.message}</span>}
 
@@ -96,6 +96,10 @@ export function RecipeForm() {
                   type="number"
                 />
                 {errors.techs?.[index]?.knowledge && <span>{errors.techs[index].knowledge.message}</span>}
+
+                <button type="button" onClick={() => remove(index)} className="bg-red-500 text-white rounded p-1">
+                  Remover
+                </button>
               </div>
             ))}
             {errors.techs && <span>{errors.techs.message}</span>}
