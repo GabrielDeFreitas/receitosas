@@ -1,0 +1,13 @@
+{
+  "users": [{ "id": 1, "name": "Gabriel", "items": ["teste01", "teste02"] }],
+  "items": {
+    "teste01": [
+      { "id": 1, "name": "SubItem1" },
+      { "id": 2, "name": "SubItem2" }
+    ],
+    "teste02": [
+      { "id": 1, "name": "SubItemA" },
+      { "id": 2, "name": "SubItemB" }
+    ]
+  }
+}
